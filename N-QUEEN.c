@@ -1,81 +1,75 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include <stdbool.h>
-int n;
-void printSolution(int board[n][n]) {
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+void printBoard(const vector<int>& board) {
+    int n = board.size();
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            printf("%d ", board[i][j]);
+            if (board[i] == j) {
+                cout << "Q ";
+            } else {
+                cout << ". ";
+            }
         }
-        printf("\n");
+        cout << endl;
     }
+    cout << endl;
 }
 
-bool isSafe(int board[n][n], int row, int col) {
-    int i, j;
 
-    // check row
-    for (i = 0; i < col; i++) {
-        if (board[row][i]) {
+bool isSafe(const vector<int>& board, int row, int col) {
+    for (int i = 0; i < row; i++) {
+        if (board[i] == col || abs(board[i] - col) == abs(i - row)) {
             return false;
         }
     }
-
-    // check upper diagonal on left side
-    for (i = row, j = col; i >= 0 && j >= 0; i--, j--) {
-        if (board[i][j]) {
-            return false;
-        }
-    }
-
-    // check lower diagonal on left side
-    for (i = row, j = col; j >= 0 && i < n; i++, j--) {
-        if (board[i][j]) {
-            return false;
-        }
-    }
-
     return true;
 }
-bool solveNQueen(int board[n][n], int col) {
-    if (col >= n) {
-        return true;
+
+// Function to solve the N-Queens problem using backtracking
+void solveNQueens(vector<int>& board, int row, vector<vector<int>>& solutions) {
+    int n = board.size();
+    if (row == n) {
+        // Found a valid solution, add it to the list
+        solutions.push_back(board);
+        return;
     }
 
-    for (int i = 0; i < n; i++) {
-        if (isSafe(board, i, col)) {
-            board[i][col] = 1;
-            if (solveNQueen(board, col + 1)) {
-                return true;
-            }
-            board[i][col] = 0; // backtrack
+    for (int col = 0; col < n; col++) {
+        if (isSafe(board, row, col)) {
+            board[row] = col;
+            solveNQueens(board, row + 1, solutions);
+            board[row] = -1;  // Backtrack
         }
     }
-
-    return false;
 }
-void main()
-{
-    printf("Enter the value of N for a N X N chessboard: ");
-    scanf("%d",&n);
-    if(n==2)
-    {
-        printf("not possible.");
-        exit(1);
-    }
-    int board[n][n];
-    for (int i = 0; i < n; i++) 
-    {
-        for (int j = 0; j < n; j++) {
-            board[i][j] = 0;
+
+// Function to find all solutions to the N-Queens problem
+vector<vector<int>> solveNQueens(int n) {
+    vector<int> board(n, -1);  // Initialize the board with -1
+    vector<vector<int>> solutions;
+    solveNQueens(board, 0, solutions);
+    return solutions;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of queens (N): ";
+    cin >> n;
+
+    vector<vector<int>> solutions = solveNQueens(n);
+
+    if (solutions.empty()) {
+        cout << "No solutions found." << endl;
+    } else {
+        cout << "Found " << solutions.size() << " solution(s):" << endl;
+        for (const vector<int>& solution : solutions) {
+            printBoard(solution);
         }
     }
-    if (solveNQueen(board, 0) == false) {
-        printf("Solution does not exist");
-    }
-    else {
-        printf("Solution:\n");
-        printSolution(board);
-        printf("The number 1 decipts the placement of the Queens.");
-    }
+
+    return 0;
 }
