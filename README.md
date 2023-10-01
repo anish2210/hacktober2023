@@ -1,5 +1,5 @@
-# web-dev-2023
-Add your web development projects.
+# HACKTOBERFEST-2023
+Add your programming problem with solution.
 # Hacktoberfest 2023 Open Source Contribution Guide
 
 Welcome to Hacktoberfest 2023! We're excited that you're interested in making an open-source contribution. This guide will help beginners get started on their journey to contributing to open-source projects during Hacktoberfest.
