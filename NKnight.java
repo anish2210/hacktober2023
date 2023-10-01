@@ -2,8 +2,8 @@ import java.util.Arrays;
 
 public class NKnight {
     public static void main(String[] args) {
-        boolean[][] board = new boolean[3][3];
-        int[][] state = new int[3][3];
+        boolean[][] board = new boolean[4][4];
+        int[][] state = new int[4][4];
         nKnight(3, board, 0, 0, state);
     }
 
